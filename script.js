@@ -21,3 +21,16 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Navigation elements not found. Check your HTML IDs!");
   }
 });
+
+function toggleDetails(card) {
+  // This toggles the 'active' class which triggers the CSS max-height change
+  card.classList.toggle("active");
+
+  // Optional: If you want only one card open at a time, uncomment the lines below:
+  /*
+  const allCards = document.querySelectorAll('.project-card');
+  allCards.forEach(item => {
+      if (item !== card) item.classList.remove('active');
+  });
+  */
+}
