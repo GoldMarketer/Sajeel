@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IG Wealth Management — Sajeel Iqbal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       IG WEALTH — PAGE VARIABLES & RESET
+       ============================================= */
+    :root {
+      --gold: #C9941A;
+      --gold-light: #E8B84B;
+      --gold-muted: #9A7020;
+      --black: #0A0A0A;
+      --black-card: #141414;
+      --black-border: #1E1E1E;
+      --grey-mid: #4A4A4A;
+      --grey-light: #888888;
+      --white: #F5F0E8;
+      --white-dim: #C8C0B0;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Montserrat', sans-serif;
+      --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --glow: 0 0 40px rgba(201, 148, 26, 0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    a { text-decoration: none; color: inherit; }
+    em { font-style: italic; color: var(--gold-light); }
+    img { display: block; max-width: 100%; }
+
+    /* =============================================
+       CURSOR
+       ============================================= */
+    .cursor {
+      position: fixed; width: 8px; height: 8px;
+      background: var(--gold); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width .2s, height .2s, background .2s;
+    }
+    .cursor--hover { width: 14px; height: 14px; background: var(--gold-light); }
+    .cursor-follower {
+      position: fixed; width: 36px; height: 36px;
+      border: 1px solid rgba(201,148,26,.5); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: border-color .3s, width .3s, height .3s;
+    }
+    .follower--hover { border-color: var(--gold); width: 48px; height: 48px; }
+
+    /* =============================================
+       NAV
+       ============================================= */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 4rem;
+      transition: padding .4s var(--ease), background .4s;
+    }
+    .nav--scrolled {
+      background: rgba(10,10,10,.95);
+      backdrop-filter: blur(12px);
+      padding: 1rem 4rem;
+      border-bottom: 1px solid var(--black-border);
+    }
+    .nav-logo img { width: 44px; height: 44px; object-fit: contain; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-link {
+      font-size: .72rem; font-weight: 500;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: var(--white-dim); transition: color .3s;
+      position: relative;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; left: 0; bottom: -4px;
+      width: 0; height: 1px; background: var(--gold);
+      transition: width .3s;
+    }
+    .nav-link:hover { color: var(--gold); }
+    .nav-link:hover::after { width: 100%; }
+    .nav-back {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .7rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid rgba(201,148,26,.4);
+      padding: .5rem 1.2rem; transition: .3s var(--ease); cursor: none;
+    }
+    .nav-back:hover { background: var(--gold); color: var(--black); }
+
+    /* =============================================
+       HERO
+       ============================================= */
+    .hero {
+      min-height: 60vh; display: flex; align-items: flex-end;
+      padding: 9rem 4rem 5rem; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 55% at 75% 40%, rgba(201,148,26,.07) 0%, transparent 70%),
+        linear-gradient(to bottom, transparent 40%, var(--black) 100%);
+    }
+    .hero-bg-word {
+      position: absolute; top: 42%; left: -1rem;
+      transform: translateY(-50%);
+      font-family: var(--font-display);
+      font-size: clamp(7rem,16vw,16rem);
+      font-weight: 700; color: transparent;
+      -webkit-text-stroke: 1px rgba(201,148,26,.05);
+      letter-spacing: -.02em;
+      user-select: none; pointer-events: none; white-space: nowrap;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 800px; }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: .8rem;
+      font-size: .7rem; font-weight: 600;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.2rem;
+    }
+    .hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 6vw, 6.5rem);
+      font-weight: 300; line-height: 1.0;
+      color: var(--white); margin-bottom: 1.5rem;
+    }
+    .hero-sub {
+      font-size: .9rem; color: var(--white-dim);
+      line-height: 1.85; max-width: 580px; margin-bottom: 2.5rem;
+    }
+
+    /* =============================================
+       SECTION NAV (sticky tabs)
+       ============================================= */
+    .section-tabs {
+      position: sticky; top: 64px; z-index: 50;
+      background: rgba(10,10,10,.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--black-border);
+      display: flex; gap: 0; overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .section-tabs::-webkit-scrollbar { display: none; }
+    .tab-link {
+      flex-shrink: 0;
+      padding: 1.1rem 2rem;
+      font-size: .68rem; font-weight: 600;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: var(--grey-light);
+      border-bottom: 2px solid transparent;
+      transition: color .3s, border-color .3s;
+      cursor: none; white-space: nowrap;
+    }
+    .tab-link:hover, .tab-link.active {
+      color: var(--gold); border-bottom-color: var(--gold);
+    }
+
+    /* =============================================
+       SHARED SECTION STYLES
+       ============================================= */
+    .page-section {
+      padding: 7rem 4rem;
+      max-width: 1400px; margin: 0 auto;
+    }
+    .page-section + .page-section {
+      border-top: 1px solid var(--black-border);
+    }
+    .section-header { margin-bottom: 3.5rem; }
+    .section-label {
+      font-size: .68rem; font-weight: 700;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: .8rem;
+    }
+    .section-label::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3.5vw, 3.5rem);
+      font-weight: 300; color: var(--white); line-height: 1.1;
+      margin-bottom: .8rem;
+    }
+    .section-desc {
+      font-size: .85rem; color: var(--white-dim);
+      line-height: 1.85; max-width: 600px;
+    }
+
+    /* Fade-up animation */
+    .reveal {
+      opacity: 0; transform: translateY(36px);
+      transition: opacity .7s var(--ease), transform .7s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* =============================================
+       1. SOCIAL MEDIA POSTS
+       ============================================= */
+    /* Filter bar */
+    .post-filters {
+      display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 2.5rem;
+    }
+    .pf-btn {
+      font-size: .62rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: .35rem .9rem;
+      border: 1px solid var(--black-border);
+      color: var(--grey-light); background: transparent;
+      transition: .3s var(--ease); cursor: none;
+    }
+    .pf-btn.active, .pf-btn:hover {
+      border-color: var(--gold); color: var(--gold);
+    }
+
+    /* Masonry-style grid */
+    .posts-grid {
+      columns: 3; column-gap: 1.2rem;
+    }
+    .post-item {
+      break-inside: avoid; margin-bottom: 1.2rem;
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      overflow: hidden; position: relative;
+      transition: border-color .3s, box-shadow .3s, transform .3s var(--ease);
+    }
+    .post-item:hover {
+      border-color: rgba(201,148,26,.35);
+      box-shadow: var(--glow);
+      transform: translateY(-3px);
+    }
+    .post-item img {
+      width: 100%; object-fit: cover;
+      transition: transform .5s var(--ease);
+    }
+    .post-item:hover img { transform: scale(1.04); }
+.post-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.85) 0%, transparent 55%);
+  opacity: 0; transition: opacity .35s;
+  display: flex; align-items: flex-end; padding: 1.2rem;
+  pointer-events: none;
+}
+
+.post-video {
+  position: relative;
+}
+.post-video video {
+  position: relative;
+  z-index: 1;
+}
+
+    .post-item:hover .post-overlay { opacity: 1; }
+    .post-overlay-text {
+      font-size: .72rem; color: var(--white); line-height: 1.5;
+    }
+    .post-overlay-tag {
+      display: block; font-size: .6rem; font-weight: 700;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: .3rem;
+    }
+    .post-type-badge {
+      position: absolute; top: .8rem; right: .8rem;
+      font-size: .58rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .25rem .65rem;
+      background: rgba(10,10,10,.8);
+      border: 1px solid rgba(201,148,26,.4);
+      color: var(--gold); backdrop-filter: blur(4px);
+    }
+
+    /* Carousel within posts */
+    .post-carousel { position: relative; overflow: hidden; }
+    .post-carousel-track { display: flex; transition: transform .45s var(--ease); }
+    .post-carousel-track img { min-width: 100%; object-fit: cover; }
+    .post-carousel-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      display: flex; justify-content: space-between;
+      width: 100%; padding: 0 .6rem; pointer-events: none;
+    }
+    .pc-btn {
+      pointer-events: all;
+      background: rgba(10,10,10,.7); border: 1px solid rgba(201,148,26,.4);
+      color: var(--gold); width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem; cursor: none; transition: .2s;
+    }
+    .pc-btn:hover { background: var(--gold); color: var(--black); }
+    .post-carousel-dots {
+      display: flex; justify-content: center; gap: 5px;
+      padding: .5rem 0; background: var(--black-card);
+    }
+    .pcd { width: 5px; height: 5px; border-radius: 50%;
+      background: var(--grey-mid); border: none; cursor: none;
+      transition: background .2s;
+    }
+    .pcd.active { background: var(--gold); }
+
+    /* Video post */
+    .post-video video {
+      width: 100%; display: block;
+      max-height: 700px; object-fit: contain; background: #000;
+    }
+
+    /* =============================================
+       2. PAID CAMPAIGNS
+       ============================================= */
+    .ads-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;
+    }
+    .ad-card {
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      overflow: hidden; position: relative;
+      transition: border-color .3s, box-shadow .3s, transform .3s var(--ease);
+    }
+    .ad-card:hover {
+      border-color: rgba(201,148,26,.4);
+      box-shadow: var(--glow); transform: translateY(-4px);
+    }
+    .ad-image-wrap {
+      position: relative; overflow: hidden;
+    }
+    .ad-image-wrap img {
+      width: 100%; object-fit: cover;
+      max-height: 620px;
+      transition: transform .5s var(--ease);
+    }
+    .ad-card:hover .ad-image-wrap img { transform: scale(1.03); }
+    .ad-platform-badge {
+      position: absolute; top: .8rem; left: .8rem;
+      font-size: .58rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: .25rem .7rem;
+      background: rgba(10,10,10,.85);
+      border: 1px solid rgba(201,148,26,.4);
+      color: var(--gold); backdrop-filter: blur(4px);
+    }
+    .ad-body { padding: 1.8rem; }
+    .ad-meta {
+      display: flex; gap: .6rem; align-items: center;
+      margin-bottom: 1rem;
+    }
+    .ad-objective {
+      font-size: .6rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--gold-muted); border: 1px solid rgba(201,148,26,.2);
+      padding: .2rem .6rem;
+    }
+    .ad-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem; font-weight: 500;
+      color: var(--white); margin-bottom: .6rem; line-height: 1.2;
+    }
+    .ad-primary {
+      font-size: .8rem; color: var(--white-dim);
+      line-height: 1.75; margin-bottom: 1.2rem;
+      border-left: 2px solid rgba(201,148,26,.25);
+      padding-left: .9rem;
+    }
+    .ad-cta-wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--black-border); padding-top: 1rem;
+    }
+    .ad-cta-btn {
+      font-size: .65rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: .45rem 1.1rem;
+      background: var(--gold); color: var(--black);
+      transition: background .3s;
+    }
+    .ad-cta-btn:hover { background: var(--gold-light); }
+    .ad-results {
+      display: flex; gap: 1.5rem;
+    }
+    .ad-result-item { text-align: right; }
+    .ad-result-val {
+      font-family: var(--font-display);
+      font-size: 1.3rem; font-weight: 500;
+      color: var(--gold); line-height: 1;
+    }
+    .ad-result-lbl {
+      font-size: .58rem; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--grey-light);
+    }
+
+    /* =============================================
+       3. WEBINARS & SEMINARS
+       ============================================= */
+    .events-list {
+      display: flex; flex-direction: column; gap: 2rem;
+    }
+    .event-card {
+      display: grid; grid-template-columns: auto 1fr auto;
+      gap: 2.5rem; align-items: start;
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      padding: 2.5rem;
+      transition: border-color .3s, box-shadow .3s;
+      position: relative; overflow: hidden;
+    }
+    .event-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 3px; height: 0;
+      background: var(--gold);
+      transition: height .4s var(--ease);
+    }
+    .event-card:hover { border-color: rgba(201,148,26,.3); box-shadow: var(--glow); }
+    .event-card:hover::before { height: 100%; }
+    .event-date-block {
+      text-align: center; min-width: 64px;
+    }
+    .event-month {
+      font-size: .62rem; font-weight: 700;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: .2rem;
+    }
+    .event-day {
+      font-family: var(--font-display);
+      font-size: 2.8rem; font-weight: 500;
+      color: var(--white); line-height: 1;
+    }
+    .event-year {
+      font-size: .65rem; color: var(--grey-light); margin-top: .2rem;
+    }
+    .event-info {}
+    .event-type-tag {
+      display: inline-block;
+      font-size: .6rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--gold-muted); border: 1px solid rgba(201,148,26,.2);
+      padding: .2rem .6rem; margin-bottom: .7rem;
+    }
+    .event-title {
+      font-family: var(--font-display);
+      font-size: 1.7rem; font-weight: 400;
+      color: var(--white); line-height: 1.15; margin-bottom: .6rem;
+    }
+    .event-desc {
+      font-size: .82rem; color: var(--white-dim); line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .event-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .event-tag {
+      font-size: .6rem; font-weight: 600;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--grey-light);
+      border: 1px solid var(--black-border); padding: .2rem .6rem;
+    }
+    .event-stats {
+      display: flex; flex-direction: column; gap: 1rem;
+      text-align: right; min-width: 120px;
+    }
+    .event-stat-num {
+      font-family: var(--font-display);
+      font-size: 1.8rem; font-weight: 500;
+      color: var(--gold); line-height: 1;
+    }
+    .event-stat-lbl {
+      font-size: .6rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--grey-light);
+    }
+    /* Event media strip */
+    .event-media {
+      grid-column: 1 / -1;
+      display: flex; gap: .8rem; overflow-x: auto;
+      padding-top: 1.5rem; margin-top: 1.5rem;
+      border-top: 1px solid var(--black-border);
+      scrollbar-width: thin; scrollbar-color: var(--gold) var(--black-border);
+    }
+    .event-media-thumb {
+      flex-shrink: 0; width: 180px; height: 120px;
+      object-fit: cover; overflow: hidden;
+      border: 1px solid var(--black-border);
+      transition: border-color .3s;
+    }
+    .event-media-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .4s var(--ease);
+    }
+    .event-media-thumb:hover { border-color: var(--gold); }
+    .event-media-thumb:hover img { transform: scale(1.06); }
+    /* Video thumb in event */
+    .event-media-video {
+      flex-shrink: 0; width: 213px; height: 120px;
+      overflow: hidden; border: 1px solid var(--black-border);
+      position: relative; background: #000;
+    }
+    .event-media-video video {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    /* =============================================
+       4. MERCHANDISE
+       ============================================= */
+    .merch-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    }
+    .merch-card {
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      overflow: hidden;
+      transition: border-color .3s, box-shadow .3s, transform .35s var(--ease);
+      position: relative;
+    }
+    .merch-card:hover {
+      border-color: rgba(201,148,26,.4);
+      box-shadow: var(--glow); transform: translateY(-5px);
+    }
+    .merch-card--wide { grid-column: span 2; }
+    .merch-img-wrap {
+      position: relative; overflow: hidden; background: #0e0e0e;
+    }
+    .merch-img-wrap img {
+      width: 100%; object-fit: cover;
+      max-height: 280px;
+      transition: transform .5s var(--ease);
+    }
+    .merch-card--wide .merch-img-wrap img { max-height: 320px; }
+    .merch-card:hover .merch-img-wrap img { transform: scale(1.05); }
+    .merch-category {
+      position: absolute; bottom: .8rem; left: .8rem;
+      font-size: .58rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: .25rem .65rem;
+      background: rgba(10,10,10,.85); backdrop-filter: blur(4px);
+      border: 1px solid rgba(201,148,26,.4); color: var(--gold);
+    }
+    .merch-body { padding: 1.5rem; }
+    .merch-name {
+      font-family: var(--font-display);
+      font-size: 1.3rem; font-weight: 500;
+      color: var(--white); margin-bottom: .5rem; line-height: 1.2;
+    }
+    .merch-desc {
+      font-size: .78rem; color: var(--white-dim); line-height: 1.75;
+    }
+    /* Multi-image merch */
+    .merch-gallery {
+      display: grid; gap: 2px;
+    }
+    .merch-gallery--2 { grid-template-columns: 1fr 1fr; }
+    .merch-gallery--3 { grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; }
+    .merch-gallery--3 .mg-main { grid-row: span 2; }
+    .merch-gallery img {
+      width: 100%; height: 180px; object-fit: cover;
+      transition: transform .4s var(--ease);
+    }
+.merch-card--wide .merch-gallery img {
+  height: 320px;
+  object-fit: contain;
+  background: #0e0e0e;
+}
+.merch-card--wide .merch-body {
+  margin-top: 1rem;
+}
+    .merch-gallery .mg-main img { height: 100%; }
+    .merch-card:hover .merch-gallery img { transform: scale(1.04); }
+
+    /* =============================================
+       PLACEHOLDER
+       ============================================= */
+    .placeholder-block {
+      background: var(--black-card);
+      border: 1px dashed var(--black-border);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: .6rem; color: var(--grey-mid);
+      min-height: 200px;
+    }
+    .ph-icon { font-size: 2rem; opacity: .35; }
+    .ph-text {
+      font-size: .68rem; letter-spacing: .12em;
+      text-transform: uppercase; opacity: .45;
+    }
+
+    /* =============================================
+       FOOTER
+       ============================================= */
+    .footer {
+      background: var(--black-card);
+      border-top: 1px solid var(--black-border);
+      padding: 3rem 4rem; margin-top: 2rem;
+    }
+    .footer-inner {
+      max-width: 1400px; margin: 0 auto;
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 2rem;
+    }
+    .footer-logo { width: 42px; opacity: .8; }
+    .footer-copy { font-size: .75rem; color: var(--grey-mid); letter-spacing: .05em; }
+    .footer-links { display: flex; gap: 2.5rem; }
+    .footer-links a {
+      font-size: .72rem; font-weight: 500;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--grey-mid); transition: color .3s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* =============================================
+       RESPONSIVE
+       ============================================= */
+    @media (max-width: 1100px) {
+      .hero, .page-section { padding-left: 2rem; padding-right: 2rem; }
+      .ads-grid { grid-template-columns: 1fr; }
+      .merch-grid { grid-template-columns: repeat(2, 1fr); }
+      .merch-card--wide { grid-column: span 2; }
+      .posts-grid { columns: 2; }
+      .event-card { grid-template-columns: auto 1fr; }
+      .event-stats { display: none; }
+      .nav { padding-left: 2rem; padding-right: 2rem; }
+      .nav--scrolled { padding-left: 2rem; padding-right: 2rem; }
+      .footer { padding: 2.5rem 2rem; }
+    }
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .posts-grid { columns: 1; }
+      .merch-grid { grid-template-columns: 1fr; }
+      .merch-card--wide { grid-column: span 1; }
+      .event-card { grid-template-columns: 1fr; }
+      .event-date-block { display: none; }
+      .section-tabs { top: 56px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursor-follower"></div>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <a href="index.html" class="nav-logo">
+      <img src="img/Initials logo.png" alt="SI Logo" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#about" class="nav-link">About</a></li>
+      <li><a href="index.html#expertise" class="nav-link">Expertise</a></li>
+      <li><a href="index.html#work" class="nav-link">Work</a></li>
+      <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+    </ul>
+    <a href="index.html#work" class="nav-back">&#8592; Back to Work</a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg-word">IG</div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">IG Wealth Management</div>
+      <h1 class="hero-title">Work That Grows <em>Your Practice</em></h1>
+      <p class="hero-sub">
+        Everything on this page was created for financial advisors at IG Wealth Management — helping them grow their client base, strengthen their digital presence, and show up professionally at every touchpoint. If you're an advisor looking to do the same, let's talk.
+      </p>
+    </div>
+  </header>
+
+  <!-- STICKY SECTION TABS -->
+  <nav class="section-tabs" id="section-tabs" aria-label="Page sections">
+    <a href="#social-posts" class="tab-link active">Social Media Posts</a>
+    <a href="#paid-campaigns" class="tab-link">Paid Campaigns</a>
+   <!--  <a href="#events" class="tab-link">Webinars & Seminars</a> -->
+    <a href="#merchandise" class="tab-link">Merchandise</a>
+    <a href="#email-marketing" class="tab-link">Email Marketing</a>
+  </nav>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 1 — SOCIAL MEDIA POSTS
+       ═══════════════════════════════════════ -->
+  <section class="page-section" id="social-posts">
+    <div class="section-header reveal">
+      <div class="section-label">01 — Social Media Posts</div>
+      <h2 class="section-title">Content That Builds <em>Presence</em></h2>
+      <p class="section-desc">
+       Compliance-approved single-image posts, carousel education pieces, and short-form video content created for advisor social profiles. Tailored content designed to educate clients, build trust, and grow digital reach.
+      </p>
+    </div>
+
+    <!-- Filter buttons -->
+    <div class="post-filters reveal">
+      <button class="pf-btn active" data-filter="all">All</button>
+      <button class="pf-btn" data-filter="single">Single Image</button>
+      <button class="pf-btn" data-filter="carousel">Carousel</button>
+      <button class="pf-btn" data-filter="video">Video / Reel</button>
+    </div>
+
+    <div class="posts-grid" id="posts-grid">
+
+      <!-- ── SINGLE IMAGE POST ── -->
+      <div class="post-item reveal" data-type="single">
+        <div class="post-type-badge">Single</div>
+        <img src="assets/ig-post-1.jpg" alt="Market Update Post"
+             onerror="this.closest('.post-item').querySelector('.post-overlay').style.opacity='1';this.style.display='none';this.closest('.post-item').style.minHeight='220px';this.closest('.post-item').style.background='#141414'">
+        <div class="post-overlay">
+          <div class="post-overlay-text">
+            <span class="post-overlay-tag">Single Image</span>
+            Market update graphic — Q3 economic outlook
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CAROUSEL POST ── -->
+      <div class="post-item reveal" data-type="carousel">
+        <div class="post-type-badge">Carousel</div>
+        <div class="post-carousel" id="pc-1">
+          <div class="post-carousel-track">
+            <img src="img/rogers-carousel/1.png" alt="Slide 1"
+                 onerror="this.closest('.post-carousel').innerHTML='<div class=\'placeholder-block\' style=\'min-height:280px\'><div class=\'ph-icon\'>🖼</div><div class=\'ph-text\'>Carousel: Retirement Planning Guide</div></div>'">
+            <img src="img/rogers-carousel/2.png" alt="Slide 2">
+            <img src="img/rogers-carousel/3.png" alt="Slide 3">
+            <img src="img/rogers-carousel/4.png" alt="Slide 4">
+            <img src="img/rogers-carousel/5.png" alt="Slide 5">
+            <img src="img/rogers-carousel/6.png" alt="Slide 6">
+          </div>
+          <div class="post-carousel-nav">
+            <button class="pc-btn pc-prev">&#8592;</button>
+            <button class="pc-btn pc-next">&#8594;</button>
+          </div>
+          <div class="post-carousel-dots">
+            <button class="pcd active"></button>
+            <button class="pcd"></button>
+            <button class="pcd"></button>
+            <button class="pcd"></button>
+          </div>
+        </div>
+        <div class="post-overlay">
+          <div class="post-overlay-text">
+            <span class="post-overlay-tag">Carousel · 6 slides</span>
+            Pension planning on recent layoffs — swipeable education series
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VIDEO / REEL ── -->
+      <div class="post-item post-video reveal" data-type="video">
+        <div class="post-type-badge">Reel</div>
+        <video controls preload="metadata"
+               onerror="this.closest('.post-item').innerHTML='<div class=\'placeholder-block\' style=\'min-height:300px\'><div class=\'ph-icon\'>▶</div><div class=\'ph-text\'>Video: Advisor Introduction Reel</div></div>'">
+          <source src="img/Retirement Planning.mp4">
+        </video>
+        <div class="post-overlay">
+          <div class="post-overlay-text">
+            <span class="post-overlay-tag">Short Video</span>
+            Advisor intro reel — personal branding content
+          </div>
+        </div>
+      </div>
+
+            <!-- ── CAROUSEL POST 2 ── -->
+      <div class="post-item reveal" data-type="carousel">
+        <div class="post-type-badge">Carousel</div>
+        <div class="post-carousel" id="pc-1">
+          <div class="post-carousel-track">
+            <img src="img/laid-off-carousel/1.png" alt="Slide 1"
+                 onerror="this.closest('.post-carousel').innerHTML='<div class=\'placeholder-block\' style=\'min-height:280px\'><div class=\'ph-icon\'>🖼</div><div class=\'ph-text\'>Carousel: Retirement Planning Guide</div></div>'">
+            <img src="img/laid-off-carousel/2.png" alt="Slide 2">
+            <img src="img/laid-off-carousel/3.png" alt="Slide 3">
+            <img src="img/laid-off-carousel/4.png" alt="Slide 4">
+            <img src="img/laid-off-carousel/5.png" alt="Slide 5">
+            <img src="img/laid-off-carousel/6.png" alt="Slide 6">
+            <img src="img/laid-off-carousel/7.png" alt="Slide 7">
+            <img src="img/laid-off-carousel/8.png" alt="Slide 8">
+            <img src="img/laid-off-carousel/9.png" alt="Slide 9">
+            <img src="img/laid-off-carousel/10.png" alt="Slide 10">
+          </div>
+          <div class="post-carousel-nav">
+            <button class="pc-btn pc-prev">&#8592;</button>
+            <button class="pc-btn pc-next">&#8594;</button>
+          </div>
+          <div class="post-carousel-dots">
+            <button class="pcd active"></button>
+            <button class="pcd"></button>
+            <button class="pcd"></button>
+            <button class="pcd"></button>
+          </div>
+        </div>
+        <div class="post-overlay">
+          <div class="post-overlay-text">
+            <span class="post-overlay-tag">Carousel · 10 slides</span>
+            Dealing with a layoff — swipeable education series
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SINGLE IMAGE POST ── -->
+      <div class="post-item reveal" data-type="single">
+        <div class="post-type-badge">Single</div>
+        <img src="assets/ig-post-2.jpg" alt="Financial Tip Post"
+             onerror="this.style.display='none';this.closest('.post-item').style.minHeight='200px'">
+        <div class="post-overlay">
+          <div class="post-overlay-text">
+            <span class="post-overlay-tag">Single Image</span>
+            Weekly financial tip — budgeting series
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CAROUSEL POST ── -->
+      <div class="post-item reveal" data-type="carousel">
+        <div class="post-type-badge">Carousel</div>
+        <div class="post-carousel" id="pc-2">
+          <div class="post-carousel-track">
+            <img src="assets/ig-carousel-2a.jpg" alt="Slide 1"
+                 onerror="this.closest('.post-carousel').innerHTML='<div class=\'placeholder-block\' style=\'min-height:240px\'><div class=\'ph-icon\'>🖼</div><div class=\'ph-text\'>Carousel: RRSP vs TFSA</div></div>'">
+            <img src="assets/ig-carousel-2b.jpg" alt="Slide 2">
+            <img src="assets/ig-carousel-2c.jpg" alt="Slide 3">
+          </div>
+          <div class="post-carousel-nav">
+            <button class="pc-btn pc-prev">&#8592;</button>
+            <button class="pc-btn pc-next">&#8594;</button>
+          </div>
+          <div class="post-carousel-dots">
+            <button class="pcd active"></button>
+            <button class="pcd"></button>
+            <button class="pcd"></button>
+          </div>
+        </div>
+        <div class="post-overlay">
+          <div class="post-overlay-text">
+            <span class="post-overlay-tag">Carousel · 3 slides</span>
+            RRSP vs TFSA breakdown
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VIDEO ── -->
+      <div class="post-item post-video reveal" data-type="video">
+        <div class="post-type-badge">Video</div>
+        <video controls preload="metadata"
+               onerror="this.closest('.post-item').innerHTML='<div class=\'placeholder-block\' style=\'min-height:260px\'><div class=\'ph-icon\'>▶</div><div class=\'ph-text\'>Video: Market Outlook Short</div></div>'">
+          <source src="assets/ig-reel-2.mp4">
+        </video>
+        <div class="post-overlay">
+          <div class="post-overlay-text">
+            <span class="post-overlay-tag">Short Video</span>
+            Market outlook — monthly commentary clip
+          </div>
+        </div>
+      </div>
+
+            <!-- ── CAROUSEL POST 3 ── -->
+      <div class="post-item reveal" data-type="carousel">
+        <div class="post-type-badge">Carousel</div>
+        <div class="post-carousel" id="pc-1">
+          <div class="post-carousel-track">
+            <img src="img/changing-job-carousel/1.png" alt="Slide 1"
+                 onerror="this.closest('.post-carousel').innerHTML='<div class=\'placeholder-block\' style=\'min-height:280px\'><div class=\'ph-icon\'>🖼</div><div class=\'ph-text\'>Carousel: Retirement Planning Guide</div></div>'">
+            <img src="img/changing-job-carousel/2.png" alt="Slide 2">
+            <img src="img/changing-job-carousel/3.png" alt="Slide 3">
+            <img src="img/changing-job-carousel/4.png" alt="Slide 4">
+            <img src="img/changing-job-carousel/5.png" alt="Slide 5">
+            <img src="img/changing-job-carousel/6.png" alt="Slide 6">
+            <img src="img/changing-job-carousel/7.png" alt="Slide 7">
+          </div>
+          <div class="post-carousel-nav">
+            <button class="pc-btn pc-prev">&#8592;</button>
+            <button class="pc-btn pc-next">&#8594;</button>
+          </div>
+          <div class="post-carousel-dots">
+            <button class="pcd active"></button>
+            <button class="pcd"></button>
+            <button class="pcd"></button>
+            <button class="pcd"></button>
+          </div>
+        </div>
+        <div class="post-overlay">
+          <div class="post-overlay-text">
+            <span class="post-overlay-tag">Carousel · 10 slides</span>
+            Dealing with a transition — swipeable education series
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VIDEO ── -->
+      <div class="post-item post-video reveal" data-type="video">
+        <div class="post-type-badge">Video</div>
+        <video controls preload="metadata"
+               onerror="this.closest('.post-item').innerHTML='<div class=\'placeholder-block\' style=\'min-height:260px\'><div class=\'ph-icon\'>▶</div><div class=\'ph-text\'>Video: Market Outlook Short</div></div>'">
+          <source src="img/holidays-post.mp4">
+        </video>
+        <div class="post-overlay">
+          <div class="post-overlay-text">
+            <span class="post-overlay-tag">Short Video</span>
+            Seasonal Post — year-end financial tips animation
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SINGLE IMAGE ── -->
+      <div class="post-item reveal" data-type="single">
+        <div class="post-type-badge">Single</div>
+        <img src="assets/ig-post-3.jpg" alt="Event Promo Post"
+             onerror="this.style.display='none';this.closest('.post-item').style.minHeight='200px'">
+        <div class="post-overlay">
+          <div class="post-overlay-text">
+            <span class="post-overlay-tag">Single Image</span>
+            Seminar promo post — event announcement graphic
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /posts-grid -->
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 2 — PAID CAMPAIGNS
+       ═══════════════════════════════════════ -->
+  <section class="page-section" id="paid-campaigns">
+    <div class="section-header reveal">
+      <div class="section-label">02 — Paid Campaigns</div>
+      <h2 class="section-title">Ads That <em>Convert</em></h2>
+      <p class="section-desc">
+        Single-image paid ads run across Meta platforms for financial advisors — each with targeted primary text, a clear value proposition, and a conversion-focused CTA.
+      </p>
+    </div>
+
+    <div class="ads-grid">
+
+      <!-- AD CARD 1 -->
+       <!--
+      <div class="ad-card reveal">
+        <div class="ad-image-wrap">
+          <div class="ad-platform-badge">Meta · Facebook</div>
+          <img src="img/connecting-the-dots-ad.png" alt="Retirement Planning Ad"
+               onerror="this.closest('.ad-image-wrap').innerHTML='<div class=\'placeholder-block\' style=\'min-height:280px\'><div class=\'ph-icon\'>📣</div><div class=\'ph-text\'>Ad Creative: Retirement Planning</div></div><div class=\'ad-platform-badge\'>Meta · Facebook</div>'">
+        </div>
+        <div class="ad-body">
+          <div class="ad-meta">
+            <span class="ad-objective">Lead Generation</span>
+          </div>
+          <div class="ad-title">Is Your Retirement Plan Actually Working For You?</div>
+          <div class="ad-primary">
+            Most Canadians are leaving money on the table. In a free 30-minute call, we'll review your current plan and show you exactly where you stand — no obligation, no jargon.
+          </div>
+          <div class="ad-cta-wrap">
+            <span class="ad-cta-btn">Book a Free Call</span>
+            <div class="ad-results">
+              <div class="ad-result-item">
+                <div class="ad-result-val">3.8%</div>
+                <div class="ad-result-lbl">CTR</div>
+              </div>
+              <div class="ad-result-item">
+                <div class="ad-result-val">$4.20</div>
+                <div class="ad-result-lbl">Cost/Lead</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+-->
+      
+      <!-- Mastering The Mix Webinar AD CARD -->
+      <div class="ad-card reveal">
+        <div class="ad-image-wrap">
+          <div class="ad-platform-badge">Meta · Instagram</div>
+          <img src="img/mastering-the-mix-ad.png" alt="Webinar Ad"
+               onerror="this.closest('.ad-image-wrap').innerHTML='<div class=\'placeholder-block\' style=\'min-height:280px\'><div class=\'ph-icon\'>📣</div><div class=\'ph-text\'>Ad Creative: Webinar Promo</div></div><div class=\'ad-platform-badge\'>Meta · Instagram</div>'">
+        </div>
+        <div class="ad-body">
+          <div class="ad-meta">
+            <span class="ad-objective">Event Registration</span>
+          </div>
+          <div class="ad-title">Free Mastering The Mix Webinar — Limited Seats Available</div>
+          <div class="ad-primary">
+            Join us for an exclusive evening webinar covering RRSP maximisation, tax-efficient withdrawal strategies, and estate planning basics. Complimentary dinner included.
+          </div>
+          <div class="ad-cta-wrap">
+            <span class="ad-cta-btn">Reserve Your Spot</span>
+            <div class="ad-results">
+              <div class="ad-result-item">
+                <div class="ad-result-val">47</div>
+                <div class="ad-result-lbl">Registrations</div>
+              </div>
+              <div class="ad-result-item">
+                <div class="ad-result-val">$8.50</div>
+                <div class="ad-result-lbl">Cost/Reg</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+            <!-- Estate Planning Webinar AD CARD -->
+      <div class="ad-card reveal">
+        <div class="ad-image-wrap">
+          <div class="ad-platform-badge">Meta · Instagram</div>
+          <img src="img/estate-planning-ad.png" alt="Webinar Ad"
+               onerror="this.closest('.ad-image-wrap').innerHTML='<div class=\'placeholder-block\' style=\'min-height:280px\'><div class=\'ph-icon\'>📣</div><div class=\'ph-text\'>Ad Creative: Webinar Promo</div></div><div class=\'ad-platform-badge\'>Meta · Instagram</div>'">
+        </div>
+        <div class="ad-body">
+          <div class="ad-meta">
+            <span class="ad-objective">Event Registration</span>
+          </div>
+          <div class="ad-title">Free Estate Webinar — Limited Seats Available</div>
+          <div class="ad-primary">
+            Join us for an exclusive evening webinar covering RRSP maximisation, tax-efficient withdrawal strategies, and estate planning basics. Complimentary dinner included.
+          </div>
+          <div class="ad-cta-wrap">
+            <span class="ad-cta-btn">Reserve Your Spot</span>
+            <div class="ad-results">
+              <div class="ad-result-item">
+                <div class="ad-result-val">47</div>
+                <div class="ad-result-lbl">Registrations</div>
+              </div>
+              <div class="ad-result-item">
+                <div class="ad-result-val">$8.50</div>
+                <div class="ad-result-lbl">Cost/Reg</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Connecting the Dots Webinar AD CARD -->
+      <div class="ad-card reveal">
+        <div class="ad-image-wrap">
+          <div class="ad-platform-badge">Meta · Instagram</div>
+          <img src="img/connecting-the-dots-ad.png" alt="Webinar Ad"
+               onerror="this.closest('.ad-image-wrap').innerHTML='<div class=\'placeholder-block\' style=\'min-height:280px\'><div class=\'ph-icon\'>📣</div><div class=\'ph-text\'>Ad Creative: Seminar Promo</div></div><div class=\'ad-platform-badge\'>Meta · Instagram</div>'">
+        </div>
+        <div class="ad-body">
+          <div class="ad-meta">
+            <span class="ad-objective">Event Registration</span>
+          </div>
+          <div class="ad-title">Free Estate & Retirement Webinar — Limited Seats Available</div>
+          <div class="ad-primary">
+            Join us for an exclusive evening seminar covering RRSP maximisation, tax-efficient withdrawal strategies, and estate planning basics. Complimentary dinner included.
+          </div>
+          <div class="ad-cta-wrap">
+            <span class="ad-cta-btn">Reserve Your Spot</span>
+            <div class="ad-results">
+              <div class="ad-result-item">
+                <div class="ad-result-val">47</div>
+                <div class="ad-result-lbl">Registrations</div>
+              </div>
+              <div class="ad-result-item">
+                <div class="ad-result-val">$8.50</div>
+                <div class="ad-result-lbl">Cost/Reg</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Woman and Wealth Webinar AD CARD -->
+      <div class="ad-card reveal">
+        <div class="ad-image-wrap">
+          <div class="ad-platform-badge">Meta · Instagram</div>
+          <img src="img/woman-wealth-ad.png" alt="Webinar Ad"
+               onerror="this.closest('.ad-image-wrap').innerHTML='<div class=\'placeholder-block\' style=\'min-height:280px\'><div class=\'ph-icon\'>📣</div><div class=\'ph-text\'>Ad Creative: Webinar Promo</div></div><div class=\'ad-platform-badge\'>Meta · Instagram</div>'">
+        </div>
+        <div class="ad-body">
+          <div class="ad-meta">
+            <span class="ad-objective">Event Registration</span>
+          </div>
+          <div class="ad-title">Free Woman and Wealth Webinar — Limited Seats Available</div>
+          <div class="ad-primary">
+            Join us for an exclusive evening webinar covering RRSP maximisation, tax-efficient withdrawal strategies, and estate planning basics. Complimentary dinner included.
+          </div>
+          <div class="ad-cta-wrap">
+            <span class="ad-cta-btn">Reserve Your Spot</span>
+            <div class="ad-results">
+              <div class="ad-result-item">
+                <div class="ad-result-val">47</div>
+                <div class="ad-result-lbl">Registrations</div>
+              </div>
+              <div class="ad-result-item">
+                <div class="ad-result-val">$8.50</div>
+                <div class="ad-result-lbl">Cost/Reg</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- AD CARD 3 -->
+       <!--
+      <div class="ad-card reveal">
+        <div class="ad-image-wrap">
+          <div class="ad-platform-badge">Meta · Facebook</div>
+          <img src="assets/ig-ad-3.jpg" alt="TFSA Ad"
+               onerror="this.closest('.ad-image-wrap').innerHTML='<div class=\'placeholder-block\' style=\'min-height:280px\'><div class=\'ph-icon\'>📣</div><div class=\'ph-text\'>Ad Creative: TFSA Guide</div></div><div class=\'ad-platform-badge\'>Meta · Facebook</div>'">
+        </div>
+        <div class="ad-body">
+          <div class="ad-meta">
+            <span class="ad-objective">Lead Generation</span>
+          </div>
+          <div class="ad-title">You're Probably Under-Using Your TFSA. Here's Why.</div>
+          <div class="ad-primary">
+            Many Canadians treat their TFSA like a savings account — but it's one of the most powerful investment vehicles available. Download our free guide and start using it properly.
+          </div>
+          <div class="ad-cta-wrap">
+            <span class="ad-cta-btn">Download Free Guide</span>
+            <div class="ad-results">
+              <div class="ad-result-item">
+                <div class="ad-result-val">212</div>
+                <div class="ad-result-lbl">Downloads</div>
+              </div>
+              <div class="ad-result-item">
+                <div class="ad-result-val">4.6%</div>
+                <div class="ad-result-lbl">CTR</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+-->
+
+      <!-- AD CARD 4 -->
+       <!--
+      <div class="ad-card reveal">
+        <div class="ad-image-wrap">
+          <div class="ad-platform-badge">Meta · Instagram</div>
+          <img src="assets/ig-ad-4.jpg" alt="Referral Ad"
+               onerror="this.closest('.ad-image-wrap').innerHTML='<div class=\'placeholder-block\' style=\'min-height:280px\'><div class=\'ph-icon\'>📣</div><div class=\'ph-text\'>Ad Creative: Referral Campaign</div></div><div class=\'ad-platform-badge\'>Meta · Instagram</div>'">
+        </div>
+        <div class="ad-body">
+          <div class="ad-meta">
+            <span class="ad-objective">Referral / Awareness</span>
+          </div>
+          <div class="ad-title">Know Someone Who Could Use a Second Opinion on Their Finances?</div>
+          <div class="ad-primary">
+            Refer a friend or family member to a complimentary financial review. We'll take the time to understand their goals — and show them what a personalised plan actually looks like.
+          </div>
+          <div class="ad-cta-wrap">
+            <span class="ad-cta-btn">Make a Referral</span>
+            <div class="ad-results">
+              <div class="ad-result-item">
+                <div class="ad-result-val">31</div>
+                <div class="ad-result-lbl">Referrals</div>
+              </div>
+              <div class="ad-result-item">
+                <div class="ad-result-val">2.1×</div>
+                <div class="ad-result-lbl">ROAS</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+-->
+    </div><!-- /ads-grid -->
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 3 — WEBINARS & SEMINARS
+       ═══════════════════════════════════════ -->
+  <!--
+       <section class="page-section" id="events">
+    <div class="section-header reveal">
+      <div class="section-label">03 — Webinars & Seminars</div>
+      <h2 class="section-title">Events That <em>Engage</em></h2>
+      <p class="section-desc">
+        In-person seminars and online webinars planned, promoted, and executed for financial advisors — from venue coordination and invitations to post-event follow-up campaigns.
+      </p>
+    </div>
+
+    <div class="events-list">
+-->
+      <!-- EVENT 1 -->
+       <!--
+      <div class="event-card reveal">
+        <div class="event-date-block">
+          <div class="event-month">Oct</div>
+          <div class="event-day">14</div>
+          <div class="event-year">2024</div>
+        </div>
+        <div class="event-info">
+          <span class="event-type-tag">In-Person Seminar</span>
+          <h3 class="event-title">Retirement Ready: An Evening with Your Financial Advisor</h3>
+          <p class="event-desc">
+            A complimentary dinner seminar held at a local venue for existing and prospective clients. Topics covered included RRSP maximisation, pension planning, and tax-efficient withdrawal strategies. Managed end-to-end: venue, invitations, paid promotion, presentation materials, and post-event email nurture.
+          </p>
+          <div class="event-tags">
+            <span class="event-tag">Venue Coordination</span>
+            <span class="event-tag">Email Invitations</span>
+            <span class="event-tag">Paid Promotion</span>
+            <span class="event-tag">Presentation Design</span>
+            <span class="event-tag">Post-Event Follow-Up</span>
+          </div>
+        </div>
+        <div class="event-stats">
+          <div>
+            <div class="event-stat-num">52</div>
+            <div class="event-stat-lbl">Attendees</div>
+          </div>
+          <div>
+            <div class="event-stat-num">8</div>
+            <div class="event-stat-lbl">New Clients</div>
+          </div>
+        </div>
+        <div class="event-media">
+          <div class="event-media-thumb">
+            <img src="assets/ig-event-1a.jpg" alt="Seminar setup"
+                 onerror="this.closest('.event-media-thumb').innerHTML='<div class=\'placeholder-block\' style=\'min-height:120px;width:180px\'><div class=\'ph-icon\' style=\'font-size:1.2rem\'>🖼</div><div class=\'ph-text\' style=\'font-size:.55rem\'>Event Photo</div></div>'">
+          </div>
+          <div class="event-media-thumb">
+            <img src="assets/ig-event-1b.jpg" alt="Presentation slide"
+                 onerror="this.closest('.event-media-thumb').innerHTML='<div class=\'placeholder-block\' style=\'min-height:120px;width:180px\'><div class=\'ph-icon\' style=\'font-size:1.2rem\'>🖼</div><div class=\'ph-text\' style=\'font-size:.55rem\'>Slide Design</div></div>'">
+          </div>
+          <div class="event-media-thumb">
+            <img src="assets/ig-event-1c.jpg" alt="Invitation design"
+                 onerror="this.closest('.event-media-thumb').innerHTML='<div class=\'placeholder-block\' style=\'min-height:120px;width:180px\'><div class=\'ph-icon\' style=\'font-size:1.2rem\'>🖼</div><div class=\'ph-text\' style=\'font-size:.55rem\'>Invitation</div></div>'">
+          </div>
+          <div class="event-media-video">
+            <video controls preload="metadata"
+                   onerror="this.closest('.event-media-video').innerHTML='<div class=\'placeholder-block\' style=\'min-height:120px\'><div class=\'ph-icon\' style=\'font-size:1.2rem\'>▶</div><div class=\'ph-text\' style=\'font-size:.55rem\'>Event Recap</div></div>'">
+              <source src="assets/ig-event-1-recap.mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+-->
+      <!-- EVENT 2 -->
+       <!--
+      <div class="event-card reveal">
+        <div class="event-date-block">
+          <div class="event-month">Mar</div>
+          <div class="event-day">06</div>
+          <div class="event-year">2024</div>
+        </div>
+        <div class="event-info">
+          <span class="event-type-tag">Online Webinar</span>
+          <h3 class="event-title">Tax Season Clarity: What Every Investor Should Know</h3>
+          <p class="event-desc">
+            A live Zoom webinar targeting existing clients ahead of tax season, covering capital gains, RRSP contribution deadlines, and income-splitting strategies. Promoted through email, organic social, and a small paid campaign. Hosted registration page and ran post-webinar replay email sequence.
+          </p>
+          <div class="event-tags">
+            <span class="event-tag">Zoom Webinar</span>
+            <span class="event-tag">Landing Page</span>
+            <span class="event-tag">Email Sequence</span>
+            <span class="event-tag">Social Promotion</span>
+            <span class="event-tag">Replay Campaign</span>
+          </div>
+        </div>
+        <div class="event-stats">
+          <div>
+            <div class="event-stat-num">89</div>
+            <div class="event-stat-lbl">Registrants</div>
+          </div>
+          <div>
+            <div class="event-stat-num">61%</div>
+            <div class="event-stat-lbl">Attendance Rate</div>
+          </div>
+        </div>
+        <div class="event-media">
+          <div class="event-media-thumb">
+            <img src="assets/ig-event-2a.jpg" alt="Webinar promo graphic"
+                 onerror="this.closest('.event-media-thumb').innerHTML='<div class=\'placeholder-block\' style=\'min-height:120px;width:180px\'><div class=\'ph-icon\' style=\'font-size:1.2rem\'>🖼</div><div class=\'ph-text\' style=\'font-size:.55rem\'>Promo Graphic</div></div>'">
+          </div>
+          <div class="event-media-thumb">
+            <img src="assets/ig-event-2b.jpg" alt="Registration page"
+                 onerror="this.closest('.event-media-thumb').innerHTML='<div class=\'placeholder-block\' style=\'min-height:120px;width:180px\'><div class=\'ph-icon\' style=\'font-size:1.2rem\'>🖼</div><div class=\'ph-text\' style=\'font-size:.55rem\'>Registration Page</div></div>'">
+          </div>
+          <div class="event-media-video">
+            <video controls preload="metadata"
+                   onerror="this.closest('.event-media-video').innerHTML='<div class=\'placeholder-block\' style=\'min-height:120px\'><div class=\'ph-icon\' style=\'font-size:1.2rem\'>▶</div><div class=\'ph-text\' style=\'font-size:.55rem\'>Webinar Excerpt</div></div>'">
+              <source src="assets/ig-event-2-clip.mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+-->
+      <!-- EVENT 3 -->
+       <!--
+      <div class="event-card reveal">
+        <div class="event-date-block">
+          <div class="event-month">Sep</div>
+          <div class="event-day">18</div>
+          <div class="event-year">2023</div>
+        </div>
+        <div class="event-info">
+          <span class="event-type-tag">In-Person Seminar</span>
+          <h3 class="event-title">Women & Wealth: Taking Control of Your Financial Future</h3>
+          <p class="event-desc">
+            A targeted seminar aimed at women investors, covering investment basics, salary negotiation, and long-term financial planning. Designed to be approachable and empowering. Handled full event marketing including targeted paid ads, email outreach, and on-the-night materials.
+          </p>
+          <div class="event-tags">
+            <span class="event-tag">Targeted Audience</span>
+            <span class="event-tag">Paid Social Ads</span>
+            <span class="event-tag">Event Materials</span>
+            <span class="event-tag">Email Outreach</span>
+          </div>
+        </div>
+        <div class="event-stats">
+          <div>
+            <div class="event-stat-num">38</div>
+            <div class="event-stat-lbl">Attendees</div>
+          </div>
+          <div>
+            <div class="event-stat-num">6</div>
+            <div class="event-stat-lbl">New Clients</div>
+          </div>
+        </div>
+        <div class="event-media">
+          <div class="event-media-thumb">
+            <img src="assets/ig-event-3a.jpg" alt="Event materials"
+                 onerror="this.closest('.event-media-thumb').innerHTML='<div class=\'placeholder-block\' style=\'min-height:120px;width:180px\'><div class=\'ph-icon\' style=\'font-size:1.2rem\'>🖼</div><div class=\'ph-text\' style=\'font-size:.55rem\'>Event Materials</div></div>'">
+          </div>
+          <div class="event-media-thumb">
+            <img src="assets/ig-event-3b.jpg" alt="Promo post"
+                 onerror="this.closest('.event-media-thumb').innerHTML='<div class=\'placeholder-block\' style=\'min-height:120px;width:180px\'><div class=\'ph-icon\' style=\'font-size:1.2rem\'>🖼</div><div class=\'ph-text\' style=\'font-size:.55rem\'>Promo Post</div></div>'">
+          </div>
+        </div>
+      </div>
+
+    </div>--><!-- /events-list -->
+  <!--</section>-->
+
+  <!-- ═══════════════════════════════════════
+       SECTION 4 — MERCHANDISE
+       ═══════════════════════════════════════ -->
+  <section class="page-section" id="merchandise">
+    <div class="section-header reveal">
+      <div class="section-label">03 — Merchandise & Branded Materials</div>
+      <h2 class="section-title">Tangible <em>Brand Touchpoints</em></h2>
+      <p class="section-desc">
+        Physical and printed branded materials created for advisors — from client-facing brochures and event giveaways to branded merchandise that keeps advisors top of mind.
+      </p>
+    </div>
+
+    <div class="merch-grid">
+
+      <!-- BROCHURES — wide -->
+      <div class="merch-card merch-card--wide reveal">
+        <div class="merch-gallery merch-gallery--2">
+          <div>
+            <img src="img/brochure-front.jpg" alt="Brochure front"
+                 onerror="this.closest('.merch-gallery').innerHTML='<div class=\'placeholder-block\' style=\'min-height:220px\'><div class=\'ph-icon\'>📄</div><div class=\'ph-text\'>Brochures</div></div>'">
+          </div>
+          <div>
+            <img src="img/brochure-back.jpg" alt="Brochure inside spread"
+                 onerror="this.style.display='none'">
+          </div>
+        </div>
+        <div class="merch-category">Brochures</div>
+        <div class="merch-body">
+          <div class="merch-name">Client-Facing Service Brochures</div>
+          <div class="merch-desc">Tri-fold and bi-fold brochures designed for advisors to leave with prospective clients — covering services, credentials, and contact information. Aligned with each advisor's personal brand within IG guidelines.</div>
+        </div>
+      </div>
+
+      <!-- NOTEBOOK -->
+      <div class="merch-card reveal">
+        <div class="merch-img-wrap">
+          <div class="merch-category">Stationery</div>
+          <img src="img/notebook.webp" alt="Branded notebook"
+               onerror="this.closest('.merch-img-wrap').innerHTML='<div class=\'placeholder-block\' style=\'min-height:240px\'><div class=\'ph-icon\'>📓</div><div class=\'ph-text\'>Branded Notebook</div></div><div class=\'merch-category\'>Stationery</div>'">
+        </div>
+        <div class="merch-body">
+          <div class="merch-name">Branded Notebooks</div>
+          <div class="merch-desc">Premium hardcover notebooks with embossed advisor branding — used as seminar gifts and client appreciation items.</div>
+        </div>
+      </div>
+
+        <!-- MUG -->
+        <div class="merch-card reveal">
+          <div class="merch-gallery merch-gallery--2">
+            <div>
+              <img src="img/mug.webp" alt="Branded mug photo"
+                  onerror="this.closest('.merch-gallery').innerHTML='<div class=\'placeholder-block\' style=\'min-height:220px\'><div class=\'ph-icon\'>☕</div><div class=\'ph-text\'>Branded Mug</div></div>'">
+            </div>
+            <div>
+              <img src="img/mug-design.png" alt="Mug design artwork"
+                  onerror="this.style.display='none'">
+            </div>
+          </div>
+          <div class="merch-category">Gifting</div>
+          <div class="merch-body">
+            <div class="merch-name">Branded Mugs</div>
+            <div class="merch-desc">Custom-printed mugs used as client appreciation gifts and event giveaways — keeping the advisor's name in the home daily.</div>
+          </div>
+        </div>
+
+      <!-- RAFFLE / PROMO — wide -->
+      <div class="merch-card merch-card--wide reveal">
+        <div class="merch-gallery merch-gallery--3">
+          <div class="mg-main">
+            <img src="img/raffle.jpg" alt="Raffle display"
+                 onerror="this.closest('.merch-gallery').innerHTML='<div class=\'placeholder-block\' style=\'min-height:220px\'><div class=\'ph-icon\'>🎁</div><div class=\'ph-text\'>Raffle Prize Display</div></div>'">
+          </div>
+          <div>
+            <img src="img/raffle-poster.png" alt="Raffle poster design"
+                 onerror="this.style.display='none'">
+          </div>
+          <div>
+            <img src="assets/ig-merch-raffle-c.jpg" alt="Prize set"
+                 onerror="this.style.display='none'">
+          </div>
+        </div>
+        <div class="merch-category">Events</div>
+        <div class="merch-body">
+          <div class="merch-name">Seminar Raffle & Prize Packages</div>
+          <div class="merch-desc">Designed and coordinated branded raffle packages for in-person seminars — including ticket design, prize curation, and on-the-night display. Used as an engagement tool to increase registration and attendance rates.</div>
+        </div>
+      </div>
+
+      <!-- DIGITAL ASSETS -->
+      <div class="merch-card reveal">
+        <div class="merch-img-wrap">
+          <div class="merch-category">Digital</div>
+          <img src="assets/ig-merch-digital.jpg" alt="Digital assets"
+               onerror="this.closest('.merch-img-wrap').innerHTML='<div class=\'placeholder-block\' style=\'min-height:240px\'><div class=\'ph-icon\'>💾</div><div class=\'ph-text\'>Digital Assets</div></div><div class=\'merch-category\'>Digital</div>'">
+        </div>
+        <div class="merch-body">
+          <div class="merch-name">Digital Resource Kits</div>
+          <div class="merch-desc">Branded PDF guides, checklists, and financial planning worksheets distributed as lead magnets and post-event follow-up resources.</div>
+        </div>
+      </div>
+
+      <!-- APPAREL -->
+      <div class="merch-card reveal">
+        <div class="merch-img-wrap">
+          <div class="merch-category">Apparel</div>
+          <img src="assets/ig-merch-apparel.jpg" alt="Branded apparel"
+               onerror="this.closest('.merch-img-wrap').innerHTML='<div class=\'placeholder-block\' style=\'min-height:240px\'><div class=\'ph-icon\'>👕</div><div class=\'ph-text\'>Branded Apparel</div></div><div class=\'merch-category\'>Apparel</div>'">
+        </div>
+        <div class="merch-body">
+          <div class="merch-name">Branded Apparel</div>
+          <div class="merch-desc">Embroidered polos and jackets for advisors and their teams — ensuring a polished, consistent look at all client-facing events and meetings.</div>
+        </div>
+      </div>
+
+        <!-- Card -->
+        <div class="merch-card reveal">
+          <div class="merch-gallery merch-gallery--2">
+            <div>
+              <img src="img/card.webp" alt="Branded mug photo"
+                  onerror="this.closest('.merch-gallery').innerHTML='<div class=\'placeholder-block\' style=\'min-height:220px\'><div class=\'ph-icon\'>☕</div><div class=\'ph-text\'>Branded Mug</div></div>'">
+            </div>
+            <div>
+              <img src="img/card-front.png" alt="Mug design artwork"
+                  onerror="this.style.display='none'">
+            </div>
+            
+          </div>
+          <div class="merch-category">Gifting</div>
+          <div class="merch-body">
+            <div class="merch-name">Personalized Card</div>
+            <div class="merch-desc">Custom-printed cards to showcase client appreciation and keeping you in their thoughts.</div>
+          </div>
+        </div>
+
+    </div><!-- /merch-grid -->
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 5 — EMAIL MARKETING
+       ═══════════════════════════════════════ -->
+  <section class="page-section" id="email-marketing">
+    <div class="section-header reveal">
+      <div class="section-label">04 — Email Marketing</div>
+      <h2 class="section-title">Emails That Get <em>Opened & Acted On</em></h2>
+      <p class="section-desc">
+        Email campaigns designed for financial advisors — from event invitations and monthly newsletters to client appreciation messages and lead nurture sequences. Every design is clean, on-brand, and built to drive a response.
+      </p>
+    </div>
+
+    <!-- Email showcase: large preview cards -->
+    <div style="display:flex;flex-direction:column;gap:3rem;">
+
+      <!-- EMAIL 1 — Event Invitation -->
+      <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;background:var(--black-card);border:1px solid var(--black-border);padding:3rem;transition:border-color .3s,box-shadow .3s;" onmouseover="this.style.borderColor='rgba(201,148,26,.35)';this.style.boxShadow='0 0 40px rgba(201,148,26,.12)'" onmouseout="this.style.borderColor='var(--black-border)';this.style.boxShadow='none'">
+        <div style="position:relative;overflow:hidden;border:1px solid var(--black-border);">
+          <img src="assets/ig-email-invite.jpg" alt="Seminar invitation email"
+               style="width:100%;display:block;transition:transform .5s;"
+               onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"
+               onerror="this.closest('div').innerHTML='<div class=\'placeholder-block\' style=\'min-height:360px\'><div class=\'ph-icon\'>✉</div><div class=\'ph-text\'>Email Design: Seminar Invitation</div></div>'">
+          <div style="position:absolute;top:.8rem;left:.8rem;font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .7rem;background:rgba(10,10,10,.85);border:1px solid rgba(201,148,26,.4);color:var(--gold);backdrop-filter:blur(4px);">Invitation</div>
+        </div>
+        <div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;">Event Invitation Email</div>
+          <h3 style="font-family:var(--font-display);font-size:1.9rem;font-weight:400;color:var(--white);line-height:1.15;margin-bottom:1rem;">Seminar & Webinar Invitations</h3>
+          <p style="font-size:.83rem;color:var(--white-dim);line-height:1.85;margin-bottom:1.5rem;">
+            Professionally designed HTML email invitations sent to advisor client lists ahead of seminars and webinars. Each email includes event details, a personalised message from the advisor, and a clear registration CTA — designed to maximise open rates and drive RSVPs.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem;">
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-muted);border:1px solid rgba(201,148,26,.2);padding:.2rem .65rem;">HTML Email</span>
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-muted);border:1px solid rgba(201,148,26,.2);padding:.2rem .65rem;">Personalisation</span>
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-muted);border:1px solid rgba(201,148,26,.2);padding:.2rem .65rem;">CTA Optimised</span>
+          </div>
+          <div style="display:flex;gap:2.5rem;border-top:1px solid var(--black-border);padding-top:1.2rem;">
+            <div>
+              <div style="font-family:var(--font-display);font-size:2rem;font-weight:500;color:var(--gold);line-height:1;">48%</div>
+              <div style="font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--grey-light);">Avg. Open Rate</div>
+            </div>
+            <div>
+              <div style="font-family:var(--font-display);font-size:2rem;font-weight:500;color:var(--gold);line-height:1;">22%</div>
+              <div style="font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--grey-light);">Click-Through Rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMAIL 2 — Monthly Newsletter -->
+      <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;background:var(--black-card);border:1px solid var(--black-border);padding:3rem;transition:border-color .3s,box-shadow .3s;" onmouseover="this.style.borderColor='rgba(201,148,26,.35)';this.style.boxShadow='0 0 40px rgba(201,148,26,.12)'" onmouseout="this.style.borderColor='var(--black-border)';this.style.boxShadow='none'">
+        <div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;">Monthly Newsletter</div>
+          <h3 style="font-family:var(--font-display);font-size:1.9rem;font-weight:400;color:var(--white);line-height:1.15;margin-bottom:1rem;">Client Newsletter Campaigns</h3>
+          <p style="font-size:.83rem;color:var(--white-dim);line-height:1.85;margin-bottom:1.5rem;">
+            Monthly newsletters sent to advisor client bases covering market updates, financial tips, upcoming events, and advisor spotlights. Designed to keep advisors top-of-mind, nurture existing client relationships, and prompt referrals organically.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem;">
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-muted);border:1px solid rgba(201,148,26,.2);padding:.2rem .65rem;">Monthly Cadence</span>
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-muted);border:1px solid rgba(201,148,26,.2);padding:.2rem .65rem;">Market Updates</span>
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-muted);border:1px solid rgba(201,148,26,.2);padding:.2rem .65rem;">Client Retention</span>
+          </div>
+          <div style="display:flex;gap:2.5rem;border-top:1px solid var(--black-border);padding-top:1.2rem;">
+            <div>
+              <div style="font-family:var(--font-display);font-size:2rem;font-weight:500;color:var(--gold);line-height:1;">41%</div>
+              <div style="font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--grey-light);">Avg. Open Rate</div>
+            </div>
+            <div>
+              <div style="font-family:var(--font-display);font-size:2rem;font-weight:500;color:var(--gold);line-height:1;">−58%</div>
+              <div style="font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--grey-light);">Unsubscribe Rate</div>
+            </div>
+          </div>
+        </div>
+        <div style="position:relative;overflow:hidden;border:1px solid var(--black-border);">
+          <img src="assets/ig-email-newsletter.jpg" alt="Monthly newsletter email"
+               style="width:100%;display:block;transition:transform .5s;"
+               onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"
+               onerror="this.closest('div').innerHTML='<div class=\'placeholder-block\' style=\'min-height:360px\'><div class=\'ph-icon\'>✉</div><div class=\'ph-text\'>Email Design: Monthly Newsletter</div></div>'">
+          <div style="position:absolute;top:.8rem;left:.8rem;font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .7rem;background:rgba(10,10,10,.85);border:1px solid rgba(201,148,26,.4);color:var(--gold);backdrop-filter:blur(4px);">Newsletter</div>
+        </div>
+      </div>
+
+      <!-- EMAIL 3 — Nurture / Follow-Up -->
+      <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;background:var(--black-card);border:1px solid var(--black-border);padding:3rem;transition:border-color .3s,box-shadow .3s;" onmouseover="this.style.borderColor='rgba(201,148,26,.35)';this.style.boxShadow='0 0 40px rgba(201,148,26,.12)'" onmouseout="this.style.borderColor='var(--black-border)';this.style.boxShadow='none'">
+        <div style="position:relative;overflow:hidden;border:1px solid var(--black-border);">
+          <img src="assets/ig-email-nurture.jpg" alt="Post-event follow-up email"
+               style="width:100%;display:block;transition:transform .5s;"
+               onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"
+               onerror="this.closest('div').innerHTML='<div class=\'placeholder-block\' style=\'min-height:360px\'><div class=\'ph-icon\'>✉</div><div class=\'ph-text\'>Email Design: Post-Event Follow-Up</div></div>'">
+          <div style="position:absolute;top:.8rem;left:.8rem;font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .7rem;background:rgba(10,10,10,.85);border:1px solid rgba(201,148,26,.4);color:var(--gold);backdrop-filter:blur(4px);">Follow-Up</div>
+        </div>
+        <div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;">Post-Event Follow-Up</div>
+          <h3 style="font-family:var(--font-display);font-size:1.9rem;font-weight:400;color:var(--white);line-height:1.15;margin-bottom:1rem;">Nurture & Follow-Up Sequences</h3>
+          <p style="font-size:.83rem;color:var(--white-dim);line-height:1.85;margin-bottom:1.5rem;">
+            Automated follow-up email sequences sent after seminars and webinars — thanking attendees, recapping key takeaways, and guiding warm leads toward booking a one-on-one consultation with the advisor. Designed to convert event attendance into booked meetings.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem;">
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-muted);border:1px solid rgba(201,148,26,.2);padding:.2rem .65rem;">Automation</span>
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-muted);border:1px solid rgba(201,148,26,.2);padding:.2rem .65rem;">Lead Nurture</span>
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-muted);border:1px solid rgba(201,148,26,.2);padding:.2rem .65rem;">Conversion Focus</span>
+          </div>
+          <div style="display:flex;gap:2.5rem;border-top:1px solid var(--black-border);padding-top:1.2rem;">
+            <div>
+              <div style="font-family:var(--font-display);font-size:2rem;font-weight:500;color:var(--gold);line-height:1;">35%</div>
+              <div style="font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--grey-light);">Meeting Conversion</div>
+            </div>
+            <div>
+              <div style="font-family:var(--font-display);font-size:2rem;font-weight:500;color:var(--gold);line-height:1;">3-Step</div>
+              <div style="font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--grey-light);">Sequence Length</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /email showcase -->
+  </section>
+
+  <!-- ADVISOR CTA -->
+  <section style="padding: 7rem 4rem; text-align: center; position: relative; overflow: hidden; border-top: 1px solid var(--black-border);">
+    <div style="position:absolute;top:-160px;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(201,148,26,.06) 0%,transparent 70%);pointer-events:none;"></div>
+    <div style="max-width: 720px; margin: 0 auto; position: relative; z-index: 1;">
+      <div style="font-size:.68rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem;display:flex;align-items:center;justify-content:center;gap:.8rem;">
+        <span style="width:28px;height:1px;background:var(--gold);display:inline-block;"></span>
+        Work With Me
+        <span style="width:28px;height:1px;background:var(--gold);display:inline-block;"></span>
+      </div>
+      <h2 style="font-family:var(--font-display);font-size:clamp(2.2rem,4vw,4.5rem);font-weight:300;line-height:1.1;color:var(--white);margin-bottom:1.2rem;">
+        Ready to Elevate <em>Your Practice?</em>
+      </h2>
+      <p style="font-size:.88rem;color:var(--white-dim);line-height:1.85;margin-bottom:2.8rem;">
+        I work directly with IG Wealth Management advisors to build their digital presence, run paid campaigns, create client-ready content, and execute events that fill rooms. Reach out and let's talk about what your practice needs.
+      </p>
+      <div style="display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;">
+        <a href="mailto:sajeel@email.com" style="display:inline-block;padding:.95rem 2.4rem;background:var(--gold);color:var(--black);font-family:var(--font-body);font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;transition:.3s;cursor:none;" onmouseover="this.style.background='#E8B84B'" onmouseout="this.style.background='var(--gold)'">
+          Get In Touch
+        </a>
+        <a href="index.html#work" style="display:inline-block;padding:.95rem 2.4rem;background:transparent;color:var(--white-dim);font-family:var(--font-body);font-size:.75rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;border:1px solid var(--grey-mid);transition:.3s;cursor:none;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--grey-mid)';this.style.color='var(--white-dim)'">
+          View More Work
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <img src="img/Initials logo.png" alt="SI" class="footer-logo" />
+      <p class="footer-copy">© 2025 Sajeel Iqbal. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="index.html#about">About</a>
+        <a href="index.html#expertise">Expertise</a>
+        <a href="index.html#work">Work</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Cursor ──────────────────────────────
+    const cursor = document.getElementById('cursor');
+    const follower = document.getElementById('cursor-follower');
+    let mx = 0, my = 0, fx = 0, fy = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    });
+    (function af() {
+      fx += (mx - fx) * 0.12; fy += (my - fy) * 0.12;
+      follower.style.left = fx + 'px'; follower.style.top = fy + 'px';
+      requestAnimationFrame(af);
+    })();
+    document.querySelectorAll('a,button').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.classList.add('cursor--hover'); follower.classList.add('follower--hover'); });
+      el.addEventListener('mouseleave', () => { cursor.classList.remove('cursor--hover'); follower.classList.remove('follower--hover'); });
+    });
+
+    // ── Nav scroll ──────────────────────────
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('nav--scrolled', scrollY > 60));
+
+    // ── Intersection observer (reveal) ──────
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.07 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // ── Sticky tab highlight ─────────────────
+    const sections = ['social-posts','paid-campaigns','events','merchandise','email-marketing'];
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const sectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tabLinks.forEach(t => t.classList.remove('active'));
+          const match = document.querySelector(`.tab-link[href="#${entry.target.id}"]`);
+          if (match) match.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) sectionObserver.observe(el);
+    });
+
+    // ── Post carousels ───────────────────────
+    document.querySelectorAll('.post-carousel').forEach(car => {
+      const track = car.querySelector('.post-carousel-track');
+      const imgs = track.querySelectorAll('img');
+      const dots = car.querySelectorAll('.pcd');
+      const prev = car.querySelector('.pc-prev');
+      const next = car.querySelector('.pc-next');
+      let cur = 0;
+      function go(i) {
+        cur = (i + imgs.length) % imgs.length;
+        track.style.transform = `translateX(-${cur * 100}%)`;
+        dots.forEach((d,j) => d.classList.toggle('active', j === cur));
+      }
+      if (prev) prev.addEventListener('click', e => { e.stopPropagation(); go(cur - 1); });
+      if (next) next.addEventListener('click', e => { e.stopPropagation(); go(cur + 1); });
+      dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
+    });
+
+    // ── Post filter ─────────────────────────
+    document.querySelectorAll('.pf-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.pf-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        document.querySelectorAll('.post-item').forEach(item => {
+          item.style.display = (f === 'all' || item.dataset.type === f) ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
