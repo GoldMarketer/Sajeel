@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>School Projects — Sajeel Iqbal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #C9941A;
+      --gold-light: #E8B84B;
+      --gold-muted: #9A7020;
+      --black: #0A0A0A;
+      --black-card: #141414;
+      --black-border: #1E1E1E;
+      --grey-mid: #4A4A4A;
+      --grey-light: #888888;
+      --white: #F5F0E8;
+      --white-dim: #C8C0B0;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Montserrat', sans-serif;
+      --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --glow: 0 0 40px rgba(201, 148, 26, 0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    a { text-decoration: none; color: inherit; }
+    em { font-style: italic; color: var(--gold-light); }
+    img { display: block; max-width: 100%; }
+
+    /* CURSOR */
+    .cursor {
+      position: fixed; width: 8px; height: 8px;
+      background: var(--gold); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width .2s, height .2s, background .2s;
+    }
+    .cursor--hover { width: 14px; height: 14px; background: var(--gold-light); }
+    .cursor-follower {
+      position: fixed; width: 36px; height: 36px;
+      border: 1px solid rgba(201,148,26,.5); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: border-color .3s, width .3s, height .3s;
+    }
+    .follower--hover { border-color: var(--gold); width: 48px; height: 48px; }
+
+    /* NAV */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 4rem;
+      transition: padding .4s var(--ease), background .4s;
+    }
+    .nav--scrolled {
+      background: rgba(10,10,10,.95);
+      backdrop-filter: blur(12px);
+      padding: 1rem 4rem;
+      border-bottom: 1px solid var(--black-border);
+    }
+    .nav-logo img { width: 44px; height: 44px; object-fit: contain; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-link {
+      font-size: .72rem; font-weight: 500;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: var(--white-dim); transition: color .3s;
+      position: relative;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; left: 0; bottom: -4px;
+      width: 0; height: 1px; background: var(--gold);
+      transition: width .3s;
+    }
+    .nav-link:hover { color: var(--gold); }
+    .nav-link:hover::after { width: 100%; }
+    .nav-back {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .7rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid rgba(201,148,26,.4);
+      padding: .5rem 1.2rem; transition: .3s var(--ease); cursor: none;
+    }
+    .nav-back:hover { background: var(--gold); color: var(--black); }
+
+    /* HERO */
+    .hero {
+      min-height: 60vh; display: flex; align-items: flex-end;
+      padding: 9rem 4rem 5rem; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 55% at 75% 40%, rgba(201,148,26,.07) 0%, transparent 70%),
+        linear-gradient(to bottom, transparent 40%, var(--black) 100%);
+    }
+    .hero-bg-word {
+      position: absolute; top: 42%; left: -1rem;
+      transform: translateY(-50%);
+      font-family: var(--font-display);
+      font-size: clamp(7rem,16vw,16rem);
+      font-weight: 700; color: transparent;
+      -webkit-text-stroke: 1px rgba(201,148,26,.05);
+      letter-spacing: -.02em;
+      user-select: none; pointer-events: none; white-space: nowrap;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 800px; }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: .8rem;
+      font-size: .7rem; font-weight: 600;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.2rem;
+    }
+    .hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 6vw, 6.5rem);
+      font-weight: 300; line-height: 1.0;
+      color: var(--white); margin-bottom: 1.5rem;
+    }
+    .hero-sub {
+      font-size: .9rem; color: var(--white-dim);
+      line-height: 1.85; max-width: 580px;
+    }
+
+    /* STICKY TABS */
+    .section-tabs {
+      position: sticky; top: 64px; z-index: 50;
+      background: rgba(10,10,10,.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--black-border);
+      display: flex; gap: 0; overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .section-tabs::-webkit-scrollbar { display: none; }
+    .tab-link {
+      flex-shrink: 0;
+      padding: 1.1rem 2rem;
+      font-size: .68rem; font-weight: 600;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: var(--grey-light);
+      border-bottom: 2px solid transparent;
+      transition: color .3s, border-color .3s;
+      cursor: none; white-space: nowrap;
+    }
+    .tab-link:hover, .tab-link.active {
+      color: var(--gold); border-bottom-color: var(--gold);
+    }
+
+    /* SHARED SECTION */
+    .page-section {
+      padding: 7rem 4rem;
+      max-width: 1400px; margin: 0 auto;
+    }
+    .page-section + .page-section {
+      border-top: 1px solid var(--black-border);
+    }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0; transform: translateY(36px);
+      transition: opacity .7s var(--ease), transform .7s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* PROJECT CARDS */
+    .projects-list {
+      display: flex; flex-direction: column; gap: 5rem;
+    }
+
+    .project-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      padding-bottom: 5rem;
+      border-bottom: 1px solid var(--black-border);
+    }
+    .project-card:last-child { border-bottom: none; padding-bottom: 0; }
+    .project-card:nth-child(even) .project-info { order: 2; }
+    .project-card:nth-child(even) .project-media { order: 1; }
+
+    /* Project Info */
+    .project-info { display: flex; flex-direction: column; gap: 1.5rem; }
+    .project-meta {
+      display: flex; gap: 1rem; align-items: center;
+    }
+    .project-number {
+      font-family: var(--font-display);
+      font-size: 4rem; font-weight: 600;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,148,26,.2);
+      line-height: 1;
+    }
+    .project-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .project-tag {
+      font-size: .6rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--gold-muted);
+      border: 1px solid rgba(201,148,26,.2);
+      padding: .2rem .65rem;
+    }
+    .project-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 2.5vw, 2.6rem);
+      font-weight: 400; color: var(--white);
+      line-height: 1.1;
+    }
+    .project-course {
+      font-size: .65rem; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: var(--gold);
+    }
+    .project-desc {
+      font-size: .85rem; color: var(--white-dim);
+      line-height: 1.85;
+    }
+    .process-heading {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--gold-light);
+      margin-top: 0.5rem;
+      margin-bottom: -0.5rem;
+    }
+
+    /* Project Media */
+    .project-media {
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .media-window {
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      overflow: hidden;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .media-window:hover {
+      border-color: rgba(201,148,26,.3);
+      box-shadow: var(--glow);
+    }
+    .media-placeholder {
+      min-height: 340px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: .8rem; color: var(--grey-mid);
+      border: 1px dashed var(--black-border);
+    }
+    .ph-icon { font-size: 2.5rem; opacity: .3; }
+    .ph-label {
+      font-size: .68rem; letter-spacing: .15em;
+      text-transform: uppercase; opacity: .4;
+    }
+    .media-caption {
+      font-size: .72rem; color: var(--white-dim);
+      line-height: 1.6; padding: .8rem 1rem;
+      border-top: 1px solid var(--black-border);
+      background: var(--black-card);
+    }
+
+/* Carousel */
+    .media-carousel { 
+      position: relative; 
+      overflow: hidden; 
+      width: 100%;
+      max-width: 100%;
+    }
+    .carousel-track { 
+      display: flex; 
+      width: 100%;
+      transition: transform .45s var(--ease); 
+    }
+    .carousel-item {
+      flex: 0 0 100%;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+      background: #0d0d0d;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .carousel-item img {
+      width: 100%;
+      height: 480px;
+      object-fit: contain;
+      display: block;
+      background: #000;
+    }
+    .carousel-nav {
+      position: absolute; top: 40%; transform: translateY(-50%);
+      display: flex; justify-content: space-between;
+      width: 100%; padding: 0 .6rem; pointer-events: none; z-index: 10;
+    }
+    .car-btn {
+      pointer-events: all;
+      background: rgba(10,10,10,.85); border: 1px solid rgba(201,148,26,.5);
+      color: var(--gold); width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; cursor: none; transition: .2s;
+    }
+    .car-btn:hover { background: var(--gold); color: var(--black); }
+    .carousel-dots {
+      display: flex; justify-content: center; gap: 8px;
+      padding: .8rem; background: var(--black-card);
+      border-top: 1px solid var(--black-border);
+    }
+    .car-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--grey-mid); border: none; cursor: none;
+      transition: background .2s;
+    }
+    .car-dot.active { background: var(--gold); }
+
+    /* Synergy Digital Brand Assets Grid */
+    .brand-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      padding: 1.5rem;
+      width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    .brand-logo-card {
+      background: #181818;
+      border: 1px solid var(--black-border);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .brand-logo-card img {
+      max-height: 120px;
+      object-fit: contain;
+    }
+    .color-swatches {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 0.5rem;
+    }
+    .swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.6rem;
+      color: var(--grey-light);
+      letter-spacing: 0.05em;
+    }
+    .swatch-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 0.3rem;
+    }
+
+    /* Pricing Table Graphic */
+    .pricing-spec {
+      background: #111111;
+      border: 1px solid var(--black-border);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+    /* Responsive Video Embed Container */
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+      overflow: hidden;
+      background: #000;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+
+    /* Pricing Table Graphic */
+    .pricing-spec {
+      background: #111111;
+      border: 1px solid var(--black-border);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .pricing-tier {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 1rem;
+      background: #181818;
+      border-left: 3px solid var(--gold);
+    }
+    .tier-name { font-size: 0.8rem; font-weight: 600; color: var(--white); }
+    .tier-rate { font-size: 0.85rem; font-weight: 700; color: var(--gold); }
+    .tier-desc { font-size: 0.7rem; color: var(--white-dim); }
+
+    /* FOOTER */
+    .footer {
+      background: var(--black-card);
+      border-top: 1px solid var(--black-border);
+      padding: 3rem 4rem; margin-top: 2rem;
+    }
+    .footer-inner {
+      max-width: 1400px; margin: 0 auto;
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 2rem;
+    }
+    .footer-logo { width: 42px; opacity: .8; }
+    .footer-copy { font-size: .75rem; color: var(--grey-mid); letter-spacing: .05em; }
+    .footer-links { display: flex; gap: 2.5rem; }
+    .footer-links a {
+      font-size: .72rem; font-weight: 500;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--grey-mid); transition: color .3s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1100px) {
+      .hero, .page-section { padding-left: 2rem; padding-right: 2rem; }
+      .nav, .nav--scrolled { padding-left: 2rem; padding-right: 2rem; }
+      .footer { padding: 2.5rem 2rem; }
+      .project-card { grid-template-columns: 1fr; gap: 3rem; }
+      .project-card:nth-child(even) .project-info,
+      .project-card:nth-child(even) .project-media { order: unset; }
+    }
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .section-tabs { top: 56px; }
+      .carousel-item img { height: 360px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursor-follower"></div>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <a href="index.html" class="nav-logo">
+      <img src="img/initials-logo.png" alt="SI Logo" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#about" class="nav-link">About</a></li>
+      <li><a href="index.html#expertise" class="nav-link">Expertise</a></li>
+      <li><a href="index.html#work" class="nav-link">Work</a></li>
+      <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+    </ul>
+    <a href="index.html#work" class="nav-back">&#8592; Back to Work</a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg-word">SCHOOL</div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Academic Work</div>
+      <h1 class="hero-title">Projects From <em>The Classroom</em></h1>
+      <p class="hero-sub">
+        A selection of projects completed as part of my Digital Communications & Marketing studies — each one a real-world application of strategy, creativity, and craft developed throughout the program.
+      </p>
+    </div>
+  </header>
+
+  <!-- STICKY TABS -->
+  <nav class="section-tabs" id="section-tabs" aria-label="Page sections">
+    <a href="#project-1" class="tab-link active">Attar Personalizer</a>
+    <a href="#project-2" class="tab-link">OFC Documentary</a>
+    <a href="#project-3" class="tab-link">Project 3</a>
+  </nav>
+
+  <!-- ═══════════════════════════════════════
+        PROJECTS
+       ═══════════════════════════════════════ -->
+  <section class="page-section">
+    <div class="projects-list">
+
+      <!-- ── PROJECT 1 ── -->
+      <article class="project-card reveal" id="project-1">
+        <div class="project-info">
+          <div class="project-meta">
+            <div class="project-number">01</div>
+          </div>
+          <div class="project-course">DCOM 3002 · Interactive Design</div>
+          <h2 class="project-title">Attar Personalizer - A Concept App</h2>
+          <div class="project-tags">
+            <span class="project-tag">UI/UX Design</span>
+            <span class="project-tag">Interactive Prototyping</span>
+            <span class="project-tag">Design Experiment</span>
+          </div>
+
+          <h3 class="process-heading">Concept &amp; Object Choice</h3>
+          <p class="project-desc">
+            This design experiment explores <strong>Attar (Ittar)</strong>, an alcohol-free, oil-based perfume deeply rooted in Middle Eastern and South Asian culture. Selected as an object rich in physical exchange, status, and sensory associations, the goal of the digital app concept is to allow users to build a custom scent profile based on individual ingredients or desired emotional moods.
+          </p>
+
+          <h3 class="process-heading">Design Process &amp; Iteration</h3>
+          <p class="project-desc">
+            To address the challenge of digital medium lacking a sense of smell, sensory associations were translated into visual and textual cues. Using an idea map, aromatic ingredients were categorized into three core groups: <em>Flowers, Spices, and Wood</em>. The initial wireframe explored a simple layout with top navigation and a central liquid container. 
+          </p>
+          <p class="project-desc">
+            Elements like typography, icons, and buttons were updated with warm, carved wood and polished metallic textures to evoke an authentic, artisanal luxury feel. Sliders and conflicting taste spectrums (e.g., Spicy vs. Sweet, Floral vs. Woody) were integrated to give users granular, real-time control over their custom fragrance mix.
+          </p>
+        </div>
+
+        <div class="project-media">
+          <div class="media-window">
+            <div class="media-carousel" id="carousel-p1">
+              <div class="carousel-track">
+                <!-- Slide 1: Moodboard 1 -->
+                <div class="carousel-item">
+                  <img src="img/projects/attar-moodboard.png" alt="Visual Moodboard 1 - Attar Ingredients" />
+                  <div class="media-caption">
+                    <strong>1. Visual Moodboard 1:</strong> Initial exploration of visual characteristics, raw botanical ingredients, and cultural context surrounding Attar.
+                  </div>
+                </div>
+                <!-- Slide 2: Mindmap -->
+                <div class="carousel-item">
+                  <img src="img/projects/attar-mindmap.png" alt="Tactile and Psychological Mindmap" />
+                  <div class="media-caption">
+                    <strong>2. Tactile &amp; Emotional Idea Map:</strong> Mapping physical tactile traits, aromatic note categories, and cultural/emotional associations of fragrance exchange.
+                  </div>
+                </div>
+                <!-- Slide 3: Moodboard 2 -->
+                <div class="carousel-item">
+                  <img src="img/projects/attar-moodboard 2.png" alt="Visual Moodboard 2 - Oud and Wood Theme" />
+                  <div class="media-caption">
+                    <strong>3. Visual Moodboard 2:</strong> Warm wood, agarwood, and earth tone color palette established for the final UI theme.
+                  </div>
+                </div>
+                <!-- Slide 4: Wireframe -->
+                <div class="carousel-item">
+                  <img src="img/projects/attar-personalizer wireframe.png" alt="Low Fidelity App Wireframe" />
+                  <div class="media-caption">
+                    <strong>4. Low-Fidelity Wireframe:</strong> Early structural concept laying out the category tabs, liquid vessel display, and metric indicators.
+                  </div>
+                </div>
+                <!-- Slide 5: Final Design -->
+                <div class="carousel-item">
+                  <img src="img/projects/attar-personalizer.png" alt="Final High Fidelity App Mockup" />
+                  <div class="media-caption">
+                    <strong>5. Final Interactive UI Mockup:</strong> <em>State Shown:</em> Adjusting Wood notes. <strong>Before:</strong> User navigated from the Floral and Spice tabs to select Wood ingredients. <strong>After:</strong> User taps the arrows to inspect bottle angles or selects "Name of Your Attar" to save their custom mix.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Controls -->
+              <div class="carousel-nav">
+                <button class="car-btn car-prev" aria-label="Previous slide">&#10094;</button>
+                <button class="car-btn car-next" aria-label="Next slide">&#10095;</button>
+              </div>
+              <div class="carousel-dots">
+                <button class="car-dot active" aria-label="Slide 1"></button>
+                <button class="car-dot" aria-label="Slide 2"></button>
+                <button class="car-dot" aria-label="Slide 3"></button>
+                <button class="car-dot" aria-label="Slide 4"></button>
+                <button class="car-dot" aria-label="Slide 5"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── PROJECT 2 ── -->
+      <article class="project-card reveal" id="project-2">
+        <div class="project-info">
+          <div class="project-meta">
+            <div class="project-number">02</div>
+          </div>
+          <div class="project-course">MEDE 3500 · Advanced Video Production</div>
+          <h2 class="project-title">OCF Juniors Lead Climbing — Video Documentary</h2>
+          <div class="project-tags">
+            <span class="project-tag">Documentary Production</span>
+            <span class="project-tag">Cinematography</span>
+            <span class="project-tag">Sports Journalism</span>
+          </div>
+
+          <h3 class="process-heading">Project Brief &amp; Concept</h3>
+          <p class="project-desc">
+            I produced a 5-minute short documentary covering the Ontario Climbing Federation (OCF) Junior Lead Climbing Provincial Championship hosted at The Hub Mississauga. 
+          </p>
+
+          <h3 class="process-heading">Production &amp; Narrative Direction</h3>
+          <p class="project-desc">
+            I pre-planned my production equipment and shot list to navigate the fast-paced, live competition environment. On location, I operated a tripod-mounted Nikon DSLR, executing manual pan and zoom tracking to follow athletes along high-wall lead routes. I captured crisp audio using a lapel mic for on-site interviews alongside a shotgun mic for ambient gym and crowd reactions. In post-production, I edited the film in Adobe Premiere Pro, balancing dual-audio tracks, pacing the narrative, and colour-grading indoor lighting to produce a polished final edit.          </p>
+        </div>
+
+        <div class="project-media">
+          <div class="media-window">
+            <div class="video-container">
+              <iframe 
+                src="https://www.youtube-nocookie.com/embed/N3O_6DmswTM" 
+                title="OCF Juniors Lead Climbing - The Hub Mississauga" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="media-caption">
+              <strong>Short Documentary Film (5:10):</strong> Directed, shot, and edited for MEDE 3500. Capturing the Ontario Provincial Lead Climbing Championships at The Hub Mississauga.
+            </div>
+          </div>
+        </div>
+      </article>
+
+<!-- ── PROJECT 3 ── -->
+      <article class="project-card reveal" id="project-3">
+        <div class="project-info">
+          <div class="project-meta">
+            <div class="project-number">03</div>
+          </div>
+          <div class="project-course">DCOM 3900 · Digital Business Planning</div>
+          <h2 class="project-title">Synergy Digital — B2B Strategy &amp; Brand Plan</h2>
+          <div class="project-tags">
+            <span class="project-tag">Entrepreneurship</span>
+            <span class="project-tag">Brand Strategy</span>
+            <span class="project-tag">Financial Compliance</span>
+            <span class="project-tag">Financial Modeling</span>
+          </div>
+
+          <h3 class="process-heading">Business Concept &amp; Value Proposition</h3>
+          <p class="project-desc">
+            Developed as a comprehensive business plan for DCOM 3900, <strong>Synergy Digital</strong> is a specialized freelance digital communications consultancy serving regulated financial professionals, wealth managers, and fintech startups in the Greater Toronto Area (GTA). The business bridges the gap between high-cost generalist agencies lacking compliance knowledge and niche consultants who lack creative execution.
+          </p>
+
+          <h3 class="process-heading">Market Positioning &amp; Growth Strategy</h3>
+          <p class="project-desc">
+            Operating under a compliance-first philosophy, Synergy Digital integrates CIRO and OSC regulatory standards into the creative process from day one. The service model introduces recurring revenue through monthly Thought Leadership Retainers ($3,500–$8,000/mo), paired with project-based Compliance Content Audits and Investor Education Funnels to convert educational content into qualified leads.
+          </p>
+        </div>
+
+        <div class="project-media">
+          <div class="media-window">
+            <div class="media-carousel" id="carousel-p3">
+              <div class="carousel-track">
+                
+                <!-- SLIDE 1: Target Audience -->
+                <div class="carousel-item" style="background: var(--black-card);">
+                  <div class="pricing-spec" style="width: 100%; height: 100%; border: none; padding: 1.5rem;">
+                    <div style="font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold);">
+                      Target Audience &amp; Primary Markets (GTA)
+                    </div>
+                    
+                    <div class="pricing-tier">
+                      <div>
+                        <div class="tier-name">Financial Advisors &amp; Wealth Managers</div>
+                        <div class="tier-desc">Solo practitioners and small teams needing compliant newsletters, market commentary, and retirement guides.</div>
+                      </div>
+                    </div>
+
+                    <div class="pricing-tier">
+                      <div>
+                        <div class="tier-name">Fintech Startups</div>
+                        <div class="tier-desc">Emerging digital financial solution firms needing clear, easy-to-understand explanations of complex technology.</div>
+                      </div>
+                    </div>
+
+                    <div class="pricing-tier">
+                      <div>
+                        <div class="tier-name">Audience Profile &amp; Goals</div>
+                        <div class="tier-desc">Regulated financial professionals looking to establish digital trust, build credibility, and capture leads without compliance risk.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="media-caption">
+                    <strong>1. Target Audience:</strong> Regulated financial professionals, wealth management teams, and fintech startups operating across the GTA.
+                  </div>
+                </div>
+
+                <!-- SLIDE 2: Brand Identity & Retainer Architecture -->
+                <div class="carousel-item" style="background: var(--black-card);">
+                  <div class="brand-grid" style="width: 100%; border: none;">
+                    <div class="brand-logo-card">
+                      <img src="img/projects/synergy-logo.png" alt="Synergy Digital Logo" />
+                      <div class="color-swatches">
+                        <div class="swatch">
+                          <div class="swatch-box" style="background: #F3B529;"></div>
+                          <span>#F3B529</span>
+                        </div>
+                        <div class="swatch">
+                          <div class="swatch-box" style="background: #4E5052;"></div>
+                          <span>#4E5052</span>
+                        </div>
+                        <div class="swatch">
+                          <div class="swatch-box" style="background: #FFFFFF;"></div>
+                          <span>#FFFFFF</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="pricing-spec">
+                      <div style="font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold);">
+                        Retainer Architecture
+                      </div>
+                      
+                      <div class="pricing-tier">
+                        <div>
+                          <div class="tier-name">Foundation Tier</div>
+                          <div class="tier-desc">4 Assets/Mo · Solo Advisors</div>
+                        </div>
+                        <div class="tier-rate">$3,500/mo</div>
+                      </div>
+
+                      <div class="pricing-tier">
+                        <div>
+                          <div class="tier-name">Growth Tier</div>
+                          <div class="tier-desc">8 Assets + Video · Mid-size Teams</div>
+                        </div>
+                        <div class="tier-rate">$5,000/mo</div>
+                      </div>
+
+                      <div class="pricing-tier">
+                        <div>
+                          <div class="tier-name">Executive Tier</div>
+                          <div class="tier-desc">12+ Assets · Enterprise &amp; Fintech</div>
+                        </div>
+                        <div class="tier-rate">$8,000/mo</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="media-caption">
+                    <strong>2. Brand Identity &amp; Pricing Architecture:</strong> Brand visual standards and monthly retainer subscription tiers.
+                  </div>
+                </div>
+
+                <!-- SLIDE 3: Core Service Offerings -->
+                <div class="carousel-item" style="background: var(--black-card);">
+                  <div class="pricing-spec" style="width: 100%; height: 100%; border: none; padding: 1.5rem;">
+                    <div style="font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold);">
+                      Core Service Breakdown
+                    </div>
+                    
+                    <div class="pricing-tier">
+                      <div>
+                        <div class="tier-name">Thought Leadership Retainer</div>
+                        <div class="tier-desc">Ongoing long-form articles, newsletters, and social media carousels to build authority.</div>
+                      </div>
+                    </div>
+
+                    <div class="pricing-tier">
+                      <div>
+                        <div class="tier-name">Compliance Content Audit &amp; Setup</div>
+                        <div class="tier-desc">Project-based asset risk reports ($500/asset) and standardized legal disclaimer templates ($600–$900).</div>
+                      </div>
+                    </div>
+
+                    <div class="pricing-tier">
+                      <div>
+                        <div class="tier-name">Investor Education Campaigns</div>
+                        <div class="tier-desc">Targeted lead funnels combining e-book lead magnets ($1.5k–$2.5k), paid ads ($1.2k), and email sequences ($1k).</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="media-caption">
+                    <strong>3. Core Service Offerings:</strong> Specialized, compliance-focused content and lead generation solutions.
+                  </div>
+                </div>
+
+                <!-- SLIDE 4: Budget & Financial Forecast -->
+                <div class="carousel-item" style="background: var(--black-card);">
+                  <div class="pricing-spec" style="width: 100%; height: 100%; border: none; padding: 1.5rem;">
+                    <div style="font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold);">
+                      Year 1 Financial Forecast &amp; Budget
+                    </div>
+                    
+                    <div class="pricing-tier">
+                      <div>
+                        <div class="tier-name">Total Upfront Startup Costs</div>
+                        <div class="tier-desc">Workstation, software licenses, liability insurance &amp; domain hosting</div>
+                      </div>
+                      <div class="tier-rate">$2,750</div>
+                    </div>
+
+                    <div class="pricing-tier">
+                      <div>
+                        <div class="tier-name">Projected Annual Revenue</div>
+                        <div class="tier-desc">Based on 2 Foundation Retainers ($3.5k/mo) + audit &amp; campaign fees</div>
+                      </div>
+                      <div class="tier-rate">$65,200</div>
+                    </div>
+
+                    <div class="pricing-tier">
+                      <div>
+                        <div class="tier-name">Net Annual Profit (Pre-Tax)</div>
+                        <div class="tier-desc">Low operating overhead ($5,000/yr); cash flow positive by Month 2</div>
+                      </div>
+                      <div class="tier-rate">$60,200</div>
+                    </div>
+                  </div>
+                  <div class="media-caption">
+                    <strong>4. Financial Management &amp; Forecast:</strong> Startup cost breakdown, cash flow timing, and year-one net profit projections.
+                  </div>
+                </div>
+
+              </div>
+
+
+              
+              <!-- Carousel Controls -->
+              <div class="carousel-nav">
+                <button class="car-btn car-prev" aria-label="Previous slide">&#10094;</button>
+                <button class="car-btn car-next" aria-label="Next slide">&#10095;</button>
+              </div>
+              <div class="carousel-dots">
+                <button class="car-dot active" aria-label="Slide 1"></button>
+                <button class="car-dot" aria-label="Slide 2"></button>
+                <button class="car-dot" aria-label="Slide 3"></button>
+                <button class="car-dot" aria-label="Slide 4"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <img src="img/initials-logo.png" alt="SI" class="footer-logo" />
+      <p class="footer-copy">© 2026 Sajeel Iqbal. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="index.html#about">About</a>
+        <a href="index.html#expertise">Expertise</a>
+        <a href="index.html#work">Work</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    const follower = document.getElementById('cursor-follower');
+    let mx = 0, my = 0, fx = 0, fy = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    });
+    (function af() {
+      fx += (mx - fx) * 0.12; fy += (my - fy) * 0.12;
+      follower.style.left = fx + 'px'; follower.style.top = fy + 'px';
+      requestAnimationFrame(af);
+    })();
+    document.querySelectorAll('a,button').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.classList.add('cursor--hover'); follower.classList.add('follower--hover'); });
+      el.addEventListener('mouseleave', () => { cursor.classList.remove('cursor--hover'); follower.classList.remove('follower--hover'); });
+    });
+
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('nav--scrolled', scrollY > 60));
+
+    // Reveal on scroll
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // Sticky tab highlight
+    const sections = ['project-1', 'project-2', 'project-3'];
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const secObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tabLinks.forEach(t => t.classList.remove('active'));
+          const match = document.querySelector(`.tab-link[href="#${entry.target.id}"]`);
+          if (match) match.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(id => { const el = document.getElementById(id); if (el) secObs.observe(el); });
+
+    // Interactive Carousels
+    document.querySelectorAll('.media-carousel').forEach(car => {
+      const track = car.querySelector('.carousel-track');
+      const items = track ? track.querySelectorAll('.carousel-item') : [];
+      const dots = car.querySelectorAll('.car-dot');
+      const prev = car.querySelector('.car-prev');
+      const next = car.querySelector('.car-next');
+      let cur = 0;
+
+      function go(i) {
+        if (!items.length) return;
+        cur = (i + items.length) % items.length;
+        track.style.transform = `translateX(-${cur * 100}%)`;
+        dots.forEach((d, j) => d.classList.toggle('active', j === cur));
+      }
+
+      if (prev) prev.addEventListener('click', e => { e.stopPropagation(); go(cur - 1); });
+      if (next) next.addEventListener('click', e => { e.stopPropagation(); go(cur + 1); });
+      dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
+    });
+  </script>
+</body>
+</html>
